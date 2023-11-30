@@ -11,4 +11,4 @@ def replace_en_num(number: any) -> str:
     for num in num_dict.keys():
         if num in text:
             text = text.replace(num, num_dict[num])
-    return text
+    return f"꧇{text}꧇"

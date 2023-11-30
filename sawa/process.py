@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 from sawa.enum.effected import Effected
 from sawa.enum.token_error import TokenError
 import sawa.util as util
@@ -36,11 +37,31 @@ class Process:
         if self.token is None or self.token == '':
             return
         new_token = ''
-        for c in self.token:
+        """for c in self.token:
             if c in self.num_dict.keys():
                 new_token += self.num_dict[c]
             else:
+                self.report_error(TokenError.INVALID_TOKEN)"""
+        temp = re.findall(r'\d+', self.token)
+        res = list(map(int, temp))
+        for rs in res:
+            part = ""
+            ischange = True
+            if len(rs) > 1:
+                for s in rs:
+                    if s in self.num_dict.keys():
+                        part += self.num_dict[s]
+                    else:
+                        ischange = False
+            else:
+                if rs in self.num_dict.keys():
+                    part += self.num_dict[rs]
+                else:
+                    ischange = False 
+            if not ischange:
                 self.report_error(TokenError.INVALID_TOKEN)
+                
+            new_token += f"꧇{part}꧇"
         self.token = new_token
 
     def change_keyword(self) -> bool:
